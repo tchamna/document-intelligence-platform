@@ -1,0 +1,68 @@
+# Healthcare IDP System - Docker Compose Configuration
+version: '3.8'
+
+services:
+  # Main IDP API Service
+  idp-api:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    container_name: healthcare-idp-api
+    ports:
+      - "8000:8000"
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - DATABASE_URL=${DATABASE_URL:-}
+    volumes:
+      - ../data:/app/data
+      - ../logs:/app/logs
+      - ../models:/app/models
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - idp-network
+
+  # Redis Cache (Optional - for session/result caching)
+  redis:
+    image: redis:7-alpine
+    container_name: healthcare-idp-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    networks:
+      - idp-network
+
+  # PostgreSQL Database (Optional - for metadata storage)
+  postgres:
+    image: postgres:15-alpine
+    container_name: healthcare-idp-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=idp_db
+      - POSTGRES_USER=${POSTGRES_USER:-idp_user}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-idp_password}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - idp-network
+
+networks:
+  idp-network:
+    driver: bridge
+
+volumes:
+  redis-data:
+  postgres-data:

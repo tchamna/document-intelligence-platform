@@ -1,0 +1,155 @@
+REQUEST FOR PROPOSAL (RFP)
+GROUP BENEFITS ADMINISTRATION SERVICES
+====================================
+
+RFP INFORMATION
+---------------
+RFP Number: RFP-2024-ADMIN-001
+Issue Date: 11/01/2024
+Proposal Due Date: 12/15/2024
+Questions Due: 11/15/2024
+
+ISSUING ORGANIZATION
+--------------------
+Organization: Metro Health Systems
+Contact: Jennifer Martinez, VP of Human Resources
+Email: jennifer.martinez@metrohealth.org
+Phone: 312-555-4567
+Address: 100 Healthcare Plaza, Chicago, IL 60601
+
+SCOPE OF WORK
+-------------
+
+1. OVERVIEW
+Metro Health Systems is seeking proposals from qualified vendors to provide comprehensive group benefits administration services for our organization of approximately 5,000 employees across 12 locations in the Midwest region.
+
+2. SERVICES REQUIRED
+
+2.1 Enrollment Administration
+- Annual open enrollment processing
+- New hire enrollment within 30 days
+- Qualifying life event changes
+- COBRA administration
+- Online enrollment portal with employee self-service
+
+2.2 Claims Administration
+- Medical, dental, and vision claims processing
+- Disability claims administration (STD and LTD)
+- Life insurance claims processing
+- Target turnaround: 5 business days for routine claims
+- Appeals processing and management
+
+2.3 Customer Service
+- Dedicated service team for Metro Health
+- Toll-free number for employee inquiries
+- Online portal with chat support
+- Service level: 95% of calls answered within 30 seconds
+- Hours: Monday-Friday, 7:00 AM - 7:00 PM CST
+
+2.4 Reporting and Analytics
+- Monthly utilization reports
+- Quarterly claims analysis
+- Annual benchmarking reports
+- Ad-hoc reporting capabilities
+- Executive dashboard
+
+2.5 Compliance
+- ERISA compliance monitoring
+- ACA reporting and filing
+- HIPAA compliance
+- State insurance regulations
+- DOL audit support
+
+3. REQUIREMENTS
+
+3.1 Technical Requirements
+- Cloud-based platform with 99.9% uptime SLA
+- Integration with our HRIS system (Workday)
+- API access for data exchange
+- Mobile app for employees
+- Single sign-on (SSO) capability
+
+3.2 Experience Requirements
+- Minimum 10 years in benefits administration
+- Experience with healthcare organizations preferred
+- Current clients of similar size (3,000-10,000 employees)
+- References from at least 3 current clients
+
+3.3 Security Requirements
+- SOC 2 Type II certification
+- Annual penetration testing
+- Data encryption at rest and in transit
+- Business continuity/disaster recovery plan
+
+4. PRICING
+
+Please provide pricing for the following:
+
+4.1 Implementation Fees
+- One-time setup and configuration
+- Data migration
+- Training
+
+4.2 Ongoing Administration Fees
+- Per Employee Per Month (PEPM) pricing
+- Tiered pricing if applicable
+- Optional services pricing
+
+4.3 Additional Services
+- Custom reporting
+- Additional integrations
+- After-hours support
+
+5. PROPOSAL FORMAT
+
+Proposals must include:
+- Executive Summary (2 pages max)
+- Company Background and Qualifications
+- Technical Solution Description
+- Implementation Plan and Timeline
+- Staffing and Account Management Structure
+- Pricing Proposal (separate sealed document)
+- Sample Reports
+- References (minimum 3)
+- Sample Service Level Agreement
+
+6. EVALUATION CRITERIA
+
+Proposals will be evaluated on:
+- Experience and Qualifications (25%)
+- Technical Capabilities (25%)
+- Service Approach (20%)
+- Pricing (20%)
+- References (10%)
+
+7. TIMELINE
+
+- RFP Issue Date: 11/01/2024
+- Questions Due: 11/15/2024
+- Responses to Questions: 11/22/2024
+- Proposals Due: 12/15/2024 by 5:00 PM CST
+- Vendor Presentations: 01/06/2025 - 01/10/2025
+- Selection Notification: 01/31/2025
+- Contract Execution: 02/28/2025
+- Implementation Start: 03/01/2025
+- Go-Live Date: 07/01/2025
+
+8. BID SUBMISSION
+
+Submit proposals electronically to:
+jennifer.martinez@metrohealth.org
+
+Subject Line: RFP-2024-ADMIN-001 Proposal Submission
+
+Proposal must be received by 5:00 PM CST on 12/15/2024.
+
+9. TERMS AND CONDITIONS
+
+- Metro Health reserves the right to reject any or all proposals.
+- All proposals become property of Metro Health Systems.
+- Vendors must maintain confidentiality of all RFP materials.
+- Metro Health is not responsible for any costs incurred in proposal preparation.
+
+For questions regarding this RFP, please contact:
+Jennifer Martinez
+jennifer.martinez@metrohealth.org

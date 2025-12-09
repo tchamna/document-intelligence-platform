@@ -1,0 +1,71 @@
+EMPLOYEE BENEFITS ENROLLMENT FORM - ELIGIBLE
+=============================================
+
+ENROLLMENT TYPE: New Employee Enrollment
+EFFECTIVE DATE: 01/01/2025
+
+EMPLOYEE INFORMATION
+--------------------
+Employee Name: Jessica Williams
+Employee ID: EMP-2024-001
+Date of Birth: 08/25/1988
+Social Security Number: 456-78-9012
+Email: jessica.williams@company.com
+Phone: 415-555-2345
+
+EMPLOYMENT DETAILS
+------------------
+Hire Date: 11/15/2024
+Employment Status: Full-Time
+Department: Engineering
+Job Title: Senior Developer
+Work Location: San Francisco, CA
+Hours Per Week: 40
+
+ELIGIBILITY STATUS
+------------------
+*** EMPLOYEE IS ELIGIBLE FOR BENEFITS ***
+Full-time employment status: VERIFIED
+Waiting period completed: YES (30 days)
+Eligible effective date: 01/01/2025
+
+PLAN SELECTIONS
+---------------
+Medical Plan: Platinum PPO Plan
+  - Employee + Family Coverage
+  - Monthly Premium: $650.00
+
+Dental Plan: Premium Dental
+  - Employee + Family Coverage
+  - Monthly Premium: $85.00
+
+Vision Plan: Enhanced Vision
+  - Employee + Family Coverage
+  - Monthly Premium: $25.00
+
+Life Insurance: 2x Annual Salary
+  - Coverage Amount: $180,000
+  - Monthly Premium: $15.00
+
+DEPENDENT INFORMATION
+---------------------
+Dependent 1: David Williams (Spouse)
+  Date of Birth: 03/12/1986
+  SSN: XXX-XX-3456
+
+Dependent 2: Emma Williams (Child)
+  Date of Birth: 06/20/2018
+  SSN: XXX-XX-7890
+
+BENEFICIARY DESIGNATION
+-----------------------
+Primary Beneficiary: David Williams (Spouse) - 100%
+
+TOTAL MONTHLY PREMIUM: $775.00
+
+EMPLOYEE ACKNOWLEDGMENT
+-----------------------
+I acknowledge that I am eligible for the benefits selected above.
+
+Signature: Jessica Williams
+Date: 12/01/2024

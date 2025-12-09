@@ -1,0 +1,97 @@
+EMPLOYEE BENEFITS ENROLLMENT FORM
+====================================
+
+ENROLLMENT TYPE
+---------------
+[ ] New Hire Enrollment
+[X] Open Enrollment
+[ ] Qualifying Life Event
+[ ] COBRA Continuation
+
+EMPLOYEE INFORMATION
+--------------------
+Employee Name: John Michael Smith
+Employee ID: EMP-2024-5678
+Date of Birth: 08/22/1990
+Social Security Number: 987-65-4321
+Hire Date: 03/15/2022
+Job Title: Software Engineer
+Department: Information Technology
+Work Location: San Francisco, CA
+
+CONTACT INFORMATION
+-------------------
+Home Address: 456 Pine Avenue, Apt 12B
+City, State ZIP: San Francisco, CA 94102
+Phone: 415-555-9876
+Email: john.smith@company.com
+
+DEPENDENT INFORMATION
+---------------------
+Dependent 1:
+  Name: Emily Rose Smith
+  Relationship: Spouse
+  Date of Birth: 11/30/1991
+  Social Security Number: 111-22-3333
+
+Dependent 2:
+  Name: Lily Grace Smith
+  Relationship: Daughter
+  Date of Birth: 06/15/2020
+  Social Security Number: 222-33-4444
+
+PLAN SELECTIONS
+---------------
+Medical Insurance:
+  Plan Type: Premium Health PPO
+  Coverage Level: Employee + Family
+  Monthly Premium: $850.00
+  Employer Contribution: $600.00
+  Employee Cost: $250.00
+
+Dental Insurance:
+  Plan Type: Dental Plus
+  Coverage Level: Employee + Family
+  Monthly Premium: $120.00
+  Employee Cost: $120.00
+
+Vision Insurance:
+  Plan Type: Vision Care Basic
+  Coverage Level: Employee + Family
+  Monthly Premium: $35.00
+  Employee Cost: $35.00
+
+Life Insurance:
+  Coverage Amount: $150,000 (2x Annual Salary)
+  Monthly Premium: $25.00
+  Employee Cost: $25.00
+
+Disability Insurance:
+  Short-Term Disability: Yes
+  Long-Term Disability: Yes
+  Monthly Premium: $45.00
+  Employee Cost: $45.00
+
+BENEFICIARY DESIGNATION
+-----------------------
+Primary Beneficiary:
+  Name: Emily Rose Smith
+  Relationship: Spouse
+  Percentage: 100%
+
+Contingent Beneficiary:
+  Name: Robert Smith
+  Relationship: Father
+  Percentage: 100%
+
+EFFECTIVE DATE
+--------------
+Coverage Effective Date: 01/01/2025
+
+ACKNOWLEDGMENT
+--------------
+I acknowledge that I have received and reviewed the Summary Plan Description for each benefit elected.
+I understand that my benefit elections are binding for the plan year unless I experience a qualifying life event.
+
+Employee Signature: John Smith
+Date: 11/15/2024

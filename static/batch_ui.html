@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare IDP System - Document Intelligence Platform</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-dark) 100%);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo { display: flex; align-items: center; gap: 1rem; }
+
+        .logo-icon {
+            width: 48px; height: 48px;
+            background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px;
+        }
+
+        .logo-text h1 { font-size: 1.5rem; font-weight: 700; }
+        .logo-text p { font-size: 0.85rem; color: var(--text-muted); }
+
+        .nav-links { display: flex; gap: 1rem; }
+        .nav-links a {
+            color: var(--text-muted); text-decoration: none;
+            padding: 0.5rem 1rem; border-radius: 8px; transition: all 0.2s;
+        }
+        .nav-links a:hover { color: var(--text); background: var(--bg-card-hover); }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 40px;
+            width: 100%;
+        }
+
+        .page-title {
+            color: var(--text);
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        /* Capabilities Grid */
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .capability-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .capability-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .capability-card .icon {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .capability-card h4 {
+            font-size: 0.85rem;
+            margin-bottom: 0.25rem;
+            color: var(--text);
+        }
+
+        .capability-card p {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+
+        /* LLM Status Banner */
+        .llm-status-banner {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .llm-status-banner.loading {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #93c5fd;
+        }
+
+        .llm-status-banner.connected {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #6ee7b7;
+        }
+
+        .llm-status-banner.mock {
+            background: rgba(245, 158, 11, 0.2);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #ffffff;
+        }
+
+        .llm-status-banner.error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+
+        .llm-status-icon {
+            font-size: 18px;
+        }
+
+        .llm-status-text {
+            flex: 1;
+        }
+
+        .llm-status-model {
+            font-size: 12px;
+            opacity: 0.8;
+            padding: 4px 8px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 4px;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 50px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--bg-dark);
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover, .upload-area.dragover {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        .upload-area.has-files {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            color: var(--text);
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .upload-hint {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-list {
+            margin: 20px 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 15px;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .file-item .file-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .file-item .file-icon {
+            font-size: 20px;
+        }
+
+        .file-item .file-name {
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        .file-item .file-size {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .file-item .remove-btn {
+            background: none;
+            border: none;
+            color: var(--error);
+            cursor: pointer;
+            font-size: 18px;
+            padding: 5px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: var(--bg-card-hover);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--border);
+        }
+
+        .btn-secondary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-sample {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-sample:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-sample:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .progress-section {
+            display: none;
+            margin: 20px 0;
+        }
+
+        .progress-section.active {
+            display: block;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-dark);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .results-section {
+            display: none;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid var(--border);
+        }
+
+        .results-section.active {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .results-header h3 {
+            color: var(--text);
+            font-size: 18px;
+        }
+
+        .results-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .stat-value.approved {
+            color: var(--success);
+        }
+
+        .stat-value.denied {
+            color: var(--error);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Results Preview Table */
+        .results-preview {
+            margin: 20px 0;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .preview-tabs {
+            display: flex;
+            background: var(--bg-dark);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .preview-tab {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .preview-tab:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .preview-tab.active {
+            background: var(--bg-card);
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .preview-content {
+            max-height: 400px;
+            overflow: auto;
+            background: #ffffff;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            background: #ffffff;
+        }
+
+        .preview-table th {
+            background: #f3f4f6;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #1f2937;
+            position: sticky;
+            top: 0;
+            border: 1px solid #d1d5db;
+        }
+
+        .preview-table td {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            color: #111827;
+            white-space: nowrap;
+            max-width: 180px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: 500;
+        }
+
+        .preview-table tr:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        .preview-table tr:nth-child(odd) {
+            background: #ffffff;
+        }
+
+        .preview-table tr:hover {
+            background: #e0f2fe;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .status-badge.success {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .status-badge.failed {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .decision-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .decision-badge.approved, .decision-badge.eligible {
+            background: #059669;
+            color: #ffffff;
+        }
+
+        .decision-badge.denied {
+            background: #dc2626;
+            color: #ffffff;
+        }
+
+        .decision-badge.pending {
+            background: #f59e0b;
+            color: #ffffff;
+        }
+
+        .decision-badge.pending_documentation, .decision-badge.docs_missing {
+            background: #8b5cf6;
+            color: #ffffff;
+        }
+
+        .decision-badge.pending_review, .decision-badge.review {
+            background: #3b82f6;
+            color: #ffffff;
+        }
+
+        .decision-badge.referred_to_medical, .decision-badge.medical {
+            background: #ec4899;
+            color: #ffffff;
+        }
+
+        .doc-type-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            background: #1d4ed8;
+            color: #ffffff;
+        }
+
+        .reasons-cell {
+            max-width: 250px;
+            font-size: 11px;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        /* Download Buttons */
+        .download-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .download-title {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .download-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .btn-download {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 20px;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            background: transparent;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-download:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-download .icon {
+            font-size: 18px;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error);
+            color: var(--error);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .error-message.active {
+            display: block;
+        }
+
+        .sample-docs {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .sample-label {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .sample-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            background: rgba(37, 99, 235, 0.1);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .sample-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .capabilities-grid {
+                display: none;
+            }
+            .results-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .download-buttons {
+                grid-template-columns: 1fr;
+            }
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🏥</div>
+                <div class="logo-text">
+                    <h1>Healthcare IDP System</h1>
+                    <p>Document Intelligence Platform</p>
+                </div>
+            </div>
+            <nav class="nav-links">
+                <a href="/ui/enhanced">🎯 Single Doc</a>
+                <a href="/ui/samples">📂 Samples</a>
+                <a href="/ui/docs">📖 Documentation</a>
+                <a href="/docs">📚 API</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-container">
+    <div class="container">
+        <h2 class="page-title">📄 Batch Document Processing</h2>
+        <p class="subtitle">Upload multiple documents (.txt, Word, PDF, TIFF, etc.) and images and download extracted data as CSV</p>
+
+        <!-- LLM Status Indicator -->
+        <div id="llmStatus" class="llm-status-banner loading">
+            <span class="llm-status-icon">⏳</span>
+            <span class="llm-status-text">Checking LLM status...</span>
+        </div>
+
+        <!-- Capabilities Grid -->
+        <div class="capabilities-grid">
+            <div class="capability-card">
+                <div class="icon">📂</div>
+                <h4>Document Classification</h4>
+                <p>RFP, Claims, Enrollment, Policy</p>
+            </div>
+            <div class="capability-card">
+                <div class="icon">📝</div>
+                <h4>Entity Extraction</h4>
+                <p>spaCy + Regex + LLM Ensemble</p>
+            </div>
+            <div class="capability-card">
+                <div class="icon">⚖️</div>
+                <h4>Claim Adjudication</h4>
+                <p>Rule-based Business Logic</p>
+            </div>
+            <div class="capability-card">
+                <div class="icon">✅</div>
+                <h4>Eligibility Matching</h4>
+                <p>Plan & Coverage Verification</p>
+            </div>
+            <div class="capability-card">
+                <div class="icon">📜</div>
+                <h4>Policy Interpretation</h4>
+                <p>NLP Clause Analysis</p>
+            </div>
+            <div class="capability-card">
+                <div class="icon">🤖</div>
+                <h4>LLM Integration</h4>
+                <p>AWS Bedrock / Claude</p>
+            </div>
+        </div>
+
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">📁</div>
+            <div class="upload-text">Drop files or folders here, or click to browse</div>
+            <div class="upload-hint">Supports: PDF, PNG, JPG, TXT, TIFF (max 50 files)</div>
+            <input type="file" id="fileInput" multiple accept=".pdf,.png,.jpg,.jpeg,.txt,.tiff,.tif">
+        </div>
+
+        <div class="file-list" id="fileList"></div>
+
+        <div class="progress-section" id="progressSection">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">Processing documents...</div>
+        </div>
+
+        <button class="btn btn-sample" id="loadSamplesBtn">
+            📂 Load Sample Documents
+        </button>
+
+        <button class="btn btn-primary" id="processBtn" disabled>
+            Process Documents
+        </button>
+
+        <button class="btn btn-secondary" id="clearBtn" disabled>
+            Clear All
+        </button>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <div class="results-section" id="resultsSection">
+            <div class="results-header">
+                <h3>✅ Processing Complete</h3>
+            </div>
+            
+            <div class="results-stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalDocs">0</div>
+                    <div class="stat-label">Documents</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="successDocs">0</div>
+                    <div class="stat-label">Processed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value approved" id="approvedDocs">0</div>
+                    <div class="stat-label">Approved/Eligible</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value denied" id="deniedDocs">0</div>
+                    <div class="stat-label">Denied/Pending</div>
+                </div>
+            </div>
+
+            <!-- Results Preview -->
+            <div class="results-preview">
+                <div class="preview-tabs">
+                    <button class="preview-tab active" data-tab="entities">📋 Extracted Entities</button>
+                    <button class="preview-tab" data-tab="summary">📊 Summary</button>
+                </div>
+                <div class="preview-content">
+                    <table class="preview-table" id="entitiesTable">
+                        <thead>
+                            <tr>
+                                <th>Filename</th>
+                                <th>Type</th>
+                                <th>Decision</th>
+                                <th>Name</th>
+                                <th>SSN</th>
+                                <th>Policy #</th>
+                                <th>Claim #</th>
+                                <th>Reasons</th>
+                            </tr>
+                        </thead>
+                        <tbody id="entitiesTableBody"></tbody>
+                    </table>
+                    <table class="preview-table" id="summaryTable" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>Filename</th>
+                                <th>Type</th>
+                                <th>Confidence</th>
+                                <th>Quality</th>
+                                <th>Entities</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="summaryTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Download Buttons -->
+            <div class="download-section">
+                <div class="download-title">Download results as CSV files</div>
+                <div class="download-buttons">
+                    <button class="btn-download" id="downloadSummary">
+                        <span class="icon">📊</span>
+                        Download Summary CSV
+                    </button>
+                    <button class="btn-download" id="downloadEntities">
+                        <span class="icon">📋</span>
+                        Download Entities CSV
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="sample-docs">
+            <span class="sample-label">Need test documents?</span>
+            <a href="/ui/samples" class="sample-link" target="_blank">📂 Download Sample Documents</a>
+        </div>
+    </div>
+    </main>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        const processBtn = document.getElementById('processBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const progressSection = document.getElementById('progressSection');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const resultsSection = document.getElementById('resultsSection');
+        const errorMessage = document.getElementById('errorMessage');
+
+        let selectedFiles = [];
+        let batchResults = null;
+        const validExtensions = ['.pdf', '.png', '.jpg', '.jpeg', '.txt', '.tiff', '.tif'];
+
+        // Check LLM status on page load
+        async function checkLLMStatus() {
+            const statusEl = document.getElementById('llmStatus');
+            try {
+                const response = await fetch('/llm/status');
+                const data = await response.json();
+                
+                statusEl.className = 'llm-status-banner ' + data.status;
+                
+                if (data.status === 'connected') {
+                    statusEl.innerHTML = `
+                        <span class="llm-status-icon">🤖</span>
+                        <span class="llm-status-text">LLM Connected - Full AI capabilities enabled</span>
+                        <span class="llm-status-model">${data.model}</span>
+                    `;
+                } else if (data.status === 'mock') {
+                    statusEl.innerHTML = `
+                        <span class="llm-status-icon">🔶</span>
+                        <span class="llm-status-text">Mock Mode - Using simulated LLM responses (configure AWS Bedrock for full capabilities)</span>
+                        <span class="llm-status-model">Demo Mode</span>
+                    `;
+                } else {
+                    statusEl.innerHTML = `
+                        <span class="llm-status-icon">⚠️</span>
+                        <span class="llm-status-text">${data.message || 'LLM Error'}</span>
+                    `;
+                }
+            } catch (err) {
+                statusEl.className = 'llm-status-banner mock';
+                statusEl.innerHTML = `
+                    <span class="llm-status-icon">🔶</span>
+                    <span class="llm-status-text">Mock Mode - Using simulated LLM responses</span>
+                    <span class="llm-status-model">Demo Mode</span>
+                `;
+            }
+        }
+        
+        // Call on page load
+        checkLLMStatus();
+
+        // Tab switching
+        document.querySelectorAll('.preview-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.preview-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                const tabName = tab.dataset.tab;
+                document.getElementById('entitiesTable').style.display = tabName === 'entities' ? 'table' : 'none';
+                document.getElementById('summaryTable').style.display = tabName === 'summary' ? 'table' : 'none';
+            });
+        });
+
+        // File upload handling
+        uploadArea.addEventListener('click', () => fileInput.click());
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', async (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            
+            // Handle both files and folders using DataTransferItemList
+            const items = e.dataTransfer.items;
+            if (items) {
+                const filePromises = [];
+                for (const item of items) {
+                    if (item.kind === 'file') {
+                        const entry = item.webkitGetAsEntry ? item.webkitGetAsEntry() : null;
+                        if (entry) {
+                            filePromises.push(traverseFileTree(entry));
+                        } else {
+                            const file = item.getAsFile();
+                            if (file) filePromises.push(Promise.resolve([file]));
+                        }
+                    }
+                }
+                const fileArrays = await Promise.all(filePromises);
+                const allFiles = fileArrays.flat();
+                handleFiles(allFiles);
+            } else {
+                handleFiles(Array.from(e.dataTransfer.files));
+            }
+        });
+
+        // Recursively traverse folder structure
+        function traverseFileTree(entry, path = '') {
+            return new Promise((resolve) => {
+                if (entry.isFile) {
+                    entry.file((file) => {
+                        file.relativePath = path + file.name;
+                        resolve([file]);
+                    }, () => resolve([]));
+                } else if (entry.isDirectory) {
+                    const dirReader = entry.createReader();
+                    const allEntries = [];
+                    
+                    const readEntries = () => {
+                        dirReader.readEntries(async (entries) => {
+                            if (entries.length === 0) {
+                                const filePromises = allEntries.map(e => 
+                                    traverseFileTree(e, path + entry.name + '/')
+                                );
+                                const results = await Promise.all(filePromises);
+                                resolve(results.flat());
+                            } else {
+                                allEntries.push(...entries);
+                                readEntries();
+                            }
+                        }, () => resolve([]));
+                    };
+                    readEntries();
+                } else {
+                    resolve([]);
+                }
+            });
+        }
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(Array.from(e.target.files));
+        });
+
+        function handleFiles(files) {
+            for (const file of files) {
+                const ext = '.' + file.name.split('.').pop().toLowerCase();
+                if (validExtensions.includes(ext) && selectedFiles.length < 50) {
+                    if (!selectedFiles.find(f => f.name === file.name && f.size === file.size)) {
+                        selectedFiles.push(file);
+                    }
+                }
+            }
+            
+            updateFileList();
+            updateButtons();
+        }
+
+        function updateFileList() {
+            if (selectedFiles.length === 0) {
+                fileList.innerHTML = '';
+                uploadArea.classList.remove('has-files');
+                return;
+            }
+
+            uploadArea.classList.add('has-files');
+            fileList.innerHTML = selectedFiles.map((file, index) => `
+                <div class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">${getFileIcon(file.name)}</span>
+                        <div>
+                            <div class="file-name">${file.name}</div>
+                            <div class="file-size">${formatFileSize(file.size)}</div>
+                        </div>
+                    </div>
+                    <button class="remove-btn" onclick="removeFile(${index})">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function getFileIcon(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            const icons = {
+                'pdf': '📕',
+                'png': '🖼️',
+                'jpg': '🖼️',
+                'jpeg': '🖼️',
+                'txt': '📄',
+                'tiff': '🖼️',
+                'tif': '🖼️'
+            };
+            return icons[ext] || '📄';
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            updateFileList();
+            updateButtons();
+        }
+
+        function updateButtons() {
+            processBtn.disabled = selectedFiles.length === 0;
+            clearBtn.disabled = selectedFiles.length === 0;
+        }
+
+        clearBtn.addEventListener('click', () => {
+            selectedFiles = [];
+            batchResults = null;
+            updateFileList();
+            updateButtons();
+            resultsSection.classList.remove('active');
+            errorMessage.classList.remove('active');
+        });
+
+        // Load Sample Documents Button
+        const loadSamplesBtn = document.getElementById('loadSamplesBtn');
+        
+        loadSamplesBtn.addEventListener('click', async () => {
+            loadSamplesBtn.disabled = true;
+            loadSamplesBtn.innerHTML = '<span class="spinner"></span>Loading samples...';
+            
+            // Sample files available in static/samples
+            const sampleFiles = [
+                { name: 'disability_claim_sample.txt', path: '/static/samples/disability_claim_sample.txt' },
+                { name: 'enrollment_form_sample.txt', path: '/static/samples/enrollment_form_sample.txt' },
+                { name: 'policy_document_sample.txt', path: '/static/samples/policy_document_sample.txt' },
+                { name: 'claim_form.png', path: '/static/samples/claim_form.png' },
+                { name: 'enrollment_form.png', path: '/static/samples/enrollment_form.png' },
+                { name: 'policy_cert.png', path: '/static/samples/policy_cert.png' }
+            ];
+            
+            try {
+                const loadedFiles = [];
+                for (const sample of sampleFiles) {
+                    try {
+                        const response = await fetch(sample.path);
+                        if (response.ok) {
+                            const blob = await response.blob();
+                            const file = new File([blob], sample.name, { type: blob.type });
+                            loadedFiles.push(file);
+                        }
+                    } catch (e) {
+                        console.log(`Could not load ${sample.name}:`, e);
+                    }
+                }
+                
+                if (loadedFiles.length > 0) {
+                    selectedFiles = loadedFiles;
+                    updateFileList();
+                    updateButtons();
+                } else {
+                    errorMessage.textContent = 'No sample files could be loaded. Please check if sample files exist.';
+                    errorMessage.classList.add('active');
+                }
+            } catch (err) {
+                errorMessage.textContent = 'Error loading sample files: ' + err.message;
+                errorMessage.classList.add('active');
+            }
+            
+            loadSamplesBtn.disabled = false;
+            loadSamplesBtn.innerHTML = '📂 Load Sample Documents';
+        });
+
+        processBtn.addEventListener('click', processDocuments);
+
+        async function processDocuments() {
+            if (selectedFiles.length === 0) return;
+
+            // Reset UI
+            errorMessage.classList.remove('active');
+            resultsSection.classList.remove('active');
+            progressSection.classList.add('active');
+            processBtn.disabled = true;
+            processBtn.innerHTML = '<span class="spinner"></span>Processing...';
+
+            const results = [];
+            const entities = [];
+            let processed = 0;
+
+            for (const file of selectedFiles) {
+                try {
+                    progressText.textContent = `Processing ${file.name} (${processed + 1}/${selectedFiles.length})`;
+                    progressFill.style.width = `${(processed / selectedFiles.length) * 100}%`;
+
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    const response = await fetch('/v2/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        
+                        // Get decision info based on document type
+                        let decision = 'pending';
+                        let reasons = '';
+                        
+                        const docType = data.document_type || 'unknown';
+                        
+                        if (docType === 'enrollment') {
+                            // For enrollment docs, use eligibility result
+                            const eligibility = data.eligibility || {};
+                            decision = eligibility.status || 'pending';
+                            // Map eligibility statuses
+                            if (decision === 'eligible' || decision === 'approved') decision = 'eligible';
+                            else if (decision === 'not_eligible') decision = 'denied';
+                            else if (decision === 'pending_verification') decision = 'pending';
+                            reasons = (eligibility.issues || []).join('; ') || 
+                                     (eligibility.matched_plan ? `Plan: ${eligibility.matched_plan}` : '');
+                        } else if (docType === 'policy') {
+                            // For policy docs, check interpretation
+                            const policy = data.policy_interpretation || {};
+                            decision = 'review';  // Policies need review
+                            reasons = `${Object.keys(policy.clauses || {}).length} clauses identified`;
+                        } else {
+                            // For claims, use adjudication result
+                            const adjudication = data.adjudication || {};
+                            decision = adjudication.decision || 'pending';
+                            // Map adjudication statuses
+                            if (decision === 'pending_documentation') decision = 'docs_missing';
+                            reasons = (adjudication.reasons || [])
+                                .filter(r => !r.passed)
+                                .map(r => r.details || r.rule)
+                                .join('; ');
+                        }
+                        
+                        results.push({
+                            filename: file.name,
+                            document_type: docType,
+                            classification_confidence: data.classification_confidence || 0,
+                            quality_score: data.quality_score || 0,
+                            status: 'success',
+                            entity_count: Object.keys(data.extracted_entities || {}).length,
+                            claim_decision: decision,
+                            decision_reasons: reasons,
+                            timestamp: new Date().toISOString()
+                        });
+
+                        // Flatten entities for CSV
+                        const ent = data.extracted_entities || {};
+                        entities.push({
+                            filename: file.name,
+                            document_type: docType,
+                            timestamp: new Date().toISOString(),
+                            claimant_name: getFirstValue(ent.persons) || '',
+                            date_of_birth: ent.date_of_birth || '',
+                            ssn: ent.ssn || '',
+                            email: ent.email || '',
+                            phone: ent.phone || '',
+                            policy_number: ent.policy_number || '',
+                            claim_number: ent.claim_number || '',
+                            employer: ent.employer || '',
+                            diagnosis: ent.diagnosis || '',
+                            date_of_disability: ent.date_of_disability || '',
+                            benefit_amount: ent.benefit_amount || '',
+                            plan_type: ent.plan_type || '',
+                            coverage_level: ent.coverage_level || '',
+                            effective_date: ent.effective_date || '',
+                            claim_decision: decision,
+                            decision_reasons: reasons,
+                            all_dates: Array.isArray(ent.date) ? ent.date.join('; ') : (ent.date || ''),
+                            all_amounts: Array.isArray(ent.money) ? ent.money.join('; ') : (ent.money || '')
+                        });
+                    } else {
+                        results.push({
+                            filename: file.name,
+                            document_type: 'unknown',
+                            classification_confidence: 0,
+                            quality_score: 0,
+                            status: 'failed',
+                            entity_count: 0,
+                            claim_decision: 'pending',
+                            decision_reasons: 'Processing failed',
+                            timestamp: new Date().toISOString(),
+                            error: 'Processing failed'
+                        });
+                    }
+                } catch (err) {
+                    results.push({
+                        filename: file.name,
+                        document_type: 'unknown',
+                        classification_confidence: 0,
+                        quality_score: 0,
+                        status: 'failed',
+                        entity_count: 0,
+                        claim_decision: 'pending',
+                        decision_reasons: err.message,
+                        timestamp: new Date().toISOString(),
+                        error: err.message
+                    });
+                }
+
+                processed++;
+            }
+
+            progressFill.style.width = '100%';
+            progressText.textContent = 'Complete!';
+
+            // Store results
+            batchResults = { summary: results, entities: entities };
+
+            // Update stats
+            const successful = results.filter(r => r.status === 'success').length;
+            const approvedCount = results.filter(r => ['approved', 'eligible'].includes(r.claim_decision)).length;
+            const deniedCount = results.filter(r => r.claim_decision === 'denied').length;
+            const pendingCount = results.filter(r => ['pending', 'docs_missing', 'review'].includes(r.claim_decision)).length;
+
+            document.getElementById('totalDocs').textContent = results.length;
+            document.getElementById('successDocs').textContent = successful;
+            document.getElementById('approvedDocs').textContent = approvedCount;
+            document.getElementById('deniedDocs').textContent = `${deniedCount}/${pendingCount}`;
+
+            // Populate preview tables
+            populateSummaryTable(results);
+            populateEntitiesTable(entities);
+
+            // Show results and scroll to them
+            setTimeout(() => {
+                progressSection.classList.remove('active');
+                resultsSection.classList.add('active');
+                processBtn.innerHTML = 'Process Documents';
+                processBtn.disabled = false;
+                
+                // Scroll to results section
+                resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 500);
+        }
+
+        function populateSummaryTable(results) {
+            const tbody = document.getElementById('summaryTableBody');
+            tbody.innerHTML = results.map(r => `
+                <tr>
+                    <td title="${r.filename}">${r.filename}</td>
+                    <td><span class="doc-type-badge">${formatDocType(r.document_type)}</span></td>
+                    <td>${(r.classification_confidence * 100).toFixed(1)}%</td>
+                    <td>${(r.quality_score * 100).toFixed(1)}%</td>
+                    <td>${r.entity_count}</td>
+                    <td><span class="status-badge ${r.status}">${r.status}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        function populateEntitiesTable(entities) {
+            const tbody = document.getElementById('entitiesTableBody');
+            tbody.innerHTML = entities.map(e => `
+                <tr>
+                    <td title="${e.filename}">${e.filename}</td>
+                    <td><span class="doc-type-badge">${formatDocType(e.document_type)}</span></td>
+                    <td><span class="decision-badge ${e.claim_decision}">${e.claim_decision}</span></td>
+                    <td title="${e.claimant_name}">${e.claimant_name || '-'}</td>
+                    <td>${e.ssn || '-'}</td>
+                    <td>${e.policy_number || '-'}</td>
+                    <td>${e.claim_number || '-'}</td>
+                    <td class="reasons-cell" title="${e.decision_reasons || ''}">${e.decision_reasons || '-'}</td>
+                </tr>
+            `).join('');
+        }
+
+        function formatDocType(type) {
+            if (!type) return 'Unknown';
+            return type.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        }
+
+        function getFirstValue(val) {
+            if (Array.isArray(val)) return val[0] || '';
+            return val || '';
+        }
+
+        document.getElementById('downloadSummary').addEventListener('click', () => {
+            if (!batchResults) return;
+            downloadCSV(batchResults.summary, 'batch_results.csv');
+        });
+
+        document.getElementById('downloadEntities').addEventListener('click', () => {
+            if (!batchResults) return;
+            downloadCSV(batchResults.entities, 'extracted_entities.csv');
+        });
+
+        function downloadCSV(data, filename) {
+            if (!data || data.length === 0) return;
+
+            const headers = Object.keys(data[0]);
+            const csvContent = [
+                headers.join(','),
+                ...data.map(row => headers.map(h => {
+                    const val = row[h] || '';
+                    const escaped = String(val).replace(/"/g, '""');
+                    return escaped.includes(',') || escaped.includes('"') || escaped.includes('\n') 
+                        ? `"${escaped}"` 
+                        : escaped;
+                }).join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

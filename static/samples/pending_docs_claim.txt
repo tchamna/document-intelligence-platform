@@ -1,0 +1,60 @@
+DISABILITY CLAIM FORM - INCOMPLETE
+====================================
+
+CLAIM INFORMATION
+-----------------
+Claim Number: CLM-2024-DOCS-001
+Date of Claim: 12/05/2024
+Policy Number: POL-2024-STD-777
+
+CLAIMANT INFORMATION
+--------------------
+Name: Amanda Rodriguez
+Date of Birth: 11/08/1992
+Social Security Number: 345-67-8901
+Address: 789 Pine Street
+City, State ZIP: Miami, FL 33101
+Phone: 305-555-3456
+Email: amanda.rodriguez@email.com
+
+EMPLOYMENT INFORMATION
+----------------------
+Employer: Rodriguez Marketing Group
+Address: 123 Ocean Drive
+City, State ZIP: Miami, FL 33102
+Occupation: Marketing Director
+Employment Start Date: 04/01/2021
+
+*** MISSING: W2/Pay Stubs - Proof of Earnings NOT PROVIDED ***
+
+DISABILITY INFORMATION
+----------------------
+Date of Disability: 11/20/2024
+Last Day Worked: 11/19/2024
+Nature of Disability: Fractured wrist from fall
+Is Disability Work Related: No
+
+PHYSICIAN INFORMATION
+---------------------
+*** MISSING: Attending Physician Statement NOT SUBMITTED ***
+
+Physician Name: Dr. David Chen, MD
+Phone: 305-555-7890
+
+DOCUMENTATION STATUS
+--------------------
+[ ] Attending Physician Statement (APS) - NOT RECEIVED
+[ ] Employer Statement - NOT RECEIVED
+[ ] Proof of Earnings (W2/Pay Stubs) - NOT RECEIVED
+[X] Claimant Statement - Attached
+[ ] Medical Records - PENDING
+
+NOTICE
+------
+This claim is PENDING additional documentation.
+Required documents must be submitted within 30 days.
+
+CLAIMANT ACKNOWLEDGMENT
+-----------------------
+Claimant Signature: Amanda Rodriguez
+Date: 12/05/2024

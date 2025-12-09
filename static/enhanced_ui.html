@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare IDP System - Document Intelligence Platform</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-dark) 100%);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo { display: flex; align-items: center; gap: 1rem; }
+        
+        .logo-icon {
+            width: 48px; height: 48px;
+            background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px;
+        }
+        
+        .logo-text h1 { font-size: 1.5rem; font-weight: 700; }
+        .logo-text p { font-size: 0.85rem; color: var(--text-muted); }
+        
+        .nav-links { display: flex; gap: 1rem; }
+        .nav-links a {
+            color: var(--text-muted); text-decoration: none;
+            padding: 0.5rem 1rem; border-radius: 8px; transition: all 0.2s;
+        }
+        .nav-links a:hover { color: var(--text); background: var(--bg-card); }
+        
+        .main-container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        
+        .hero-section { text-align: center; padding: 2rem 0 3rem; }
+        .hero-section h2 { font-size: 2rem; margin-bottom: 0.5rem; }
+        .hero-section p { color: var(--text-muted); font-size: 1.1rem; }
+        
+        .capabilities-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem; margin: 2rem 0;
+        }
+        
+        .capability-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.25rem; text-align: center;
+        }
+        .capability-card .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        .capability-card h4 { font-size: 0.9rem; margin-bottom: 0.25rem; }
+        .capability-card p { font-size: 0.75rem; color: var(--text-muted); }
+        
+        .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        @media (max-width: 1024px) { .content-grid { grid-template-columns: 1fr; } }
+        
+        .panel {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 16px; overflow: hidden;
+        }
+        
+        .panel-header {
+            padding: 1rem 1.5rem; border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .panel-header h3 { font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .panel-body { padding: 1.5rem; }
+        
+        .upload-zone {
+            border: 2px dashed var(--border); border-radius: 12px;
+            padding: 3rem 2rem; text-align: center;
+            transition: all 0.3s; cursor: pointer;
+        }
+        .upload-zone:hover, .upload-zone.dragover {
+            border-color: var(--primary); background: rgba(37, 99, 235, 0.1);
+        }
+        .upload-zone .icon { font-size: 3rem; margin-bottom: 1rem; }
+        .upload-zone h4 { margin-bottom: 0.5rem; }
+        .upload-zone p { color: var(--text-muted); font-size: 0.9rem; }
+        .file-input { display: none; }
+        
+        .btn {
+            padding: 0.75rem 1.5rem; border-radius: 8px; border: none;
+            font-size: 0.95rem; font-weight: 600; cursor: pointer;
+            transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-secondary { background: var(--bg-card-hover); color: var(--text); }
+        .btn-sm { padding: 0.5rem 1rem; font-size: 0.85rem; }
+        
+        .pipeline-select { display: flex; gap: 0.5rem; margin-top: 1rem; }
+        .pipeline-option {
+            flex: 1; padding: 0.75rem; border: 2px solid var(--border);
+            border-radius: 8px; text-align: center; cursor: pointer; transition: all 0.2s;
+        }
+        .pipeline-option:hover { border-color: var(--primary); }
+        .pipeline-option.active { border-color: var(--primary); background: rgba(37, 99, 235, 0.1); }
+        .pipeline-option .label { font-weight: 600; font-size: 0.85rem; }
+        .pipeline-option .desc { font-size: 0.75rem; color: var(--text-muted); }
+        
+        .results-container { max-height: 600px; overflow-y: auto; }
+        .result-section { margin-bottom: 1.5rem; }
+        .result-section h4 {
+            font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.75rem;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+        }
+        .status-badge.success { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .status-badge.warning { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .status-badge.error { background: rgba(239, 68, 68, 0.2); color: var(--error); }
+        .status-badge.info { background: rgba(37, 99, 235, 0.2); color: var(--primary); }
+        
+        .confidence-bar { height: 8px; background: var(--bg-dark); border-radius: 4px; overflow: hidden; margin-top: 0.5rem; }
+        .confidence-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+        
+        .entity-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.75rem; }
+        .entity-item { background: var(--bg-dark); padding: 0.75rem; border-radius: 8px; border-left: 3px solid var(--primary); }
+        .entity-item .label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .entity-item .value { font-size: 0.9rem; font-weight: 500; word-break: break-word; }
+        
+        .adjudication-result { background: var(--bg-dark); border-radius: 12px; padding: 1.25rem; }
+        .adjudication-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .adjudication-details { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        .detail-item { background: var(--bg-card); padding: 0.75rem; border-radius: 8px; }
+        .detail-item .label { font-size: 0.75rem; color: var(--text-muted); }
+        .detail-item .value { font-size: 1rem; font-weight: 600; }
+        
+        .recommendations-list { list-style: none; }
+        .recommendations-list li { padding: 0.5rem 0; padding-left: 1.5rem; position: relative; border-bottom: 1px solid var(--border); }
+        .recommendations-list li:last-child { border-bottom: none; }
+        .recommendations-list li::before { content: '→'; position: absolute; left: 0; color: var(--primary); }
+        
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; }
+        .metric-card { text-align: center; padding: 1rem; background: var(--bg-dark); border-radius: 8px; }
+        .metric-card .value { font-size: 1.75rem; font-weight: 700; color: var(--primary); }
+        .metric-card .label { font-size: 0.75rem; color: var(--text-muted); }
+        
+        .loading { text-align: center; padding: 2rem; }
+        .spinner { width: 48px; height: 48px; border: 4px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .empty-state { text-align: center; padding: 3rem; color: var(--text-muted); }
+        .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
+        
+        .quality-score { display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-dark); border-radius: 12px; }
+        .quality-score .score { font-size: 2.5rem; font-weight: 700; }
+        .quality-score .info h5 { font-size: 0.9rem; margin-bottom: 0.25rem; }
+        .quality-score .info p { font-size: 0.8rem; color: var(--text-muted); }
+        
+        .tech-badge { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.5rem; background: var(--bg-dark); border-radius: 4px; font-size: 0.7rem; margin: 0.125rem; }
+        
+        .sample-doc-card {
+            background: var(--bg-dark); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.25rem; cursor: pointer;
+            transition: all 0.3s; position: relative; overflow: hidden;
+        }
+        .sample-doc-card:hover {
+            border-color: var(--primary); transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+        .sample-doc-card .icon { font-size: 2rem; margin-bottom: 0.75rem; }
+        .sample-doc-card h4 { font-size: 1rem; margin-bottom: 0.5rem; }
+        .sample-doc-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+        .sample-doc-card .sample-fields { font-size: 0.75rem; color: var(--primary); }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🏥</div>
+                <div class="logo-text">
+                    <h1>Healthcare IDP</h1>
+                    <p>Intelligent Document Processing Platform</p>
+                </div>
+            </div>
+            <nav class="nav-links">
+                <a href="/ui">📄 Batch</a>
+                <a href="/ui/samples">📂 Samples</a>
+                <a href="/ui/docs">📖 Docs</a>
+                <a href="/docs" target="_blank">📚 API</a>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="main-container">
+        <section class="hero-section">
+            <h2>Document Intelligence for Group Benefits</h2>
+            <p>Process disability claims, enrollment forms, policy documents, and RFPs with 97-99% accuracy</p>
+            
+            <div class="capabilities-grid">
+                <div class="capability-card">
+                    <div class="icon">🔍</div>
+                    <h4>Document Classification</h4>
+                    <p>RFP, Claims, Enrollment, Policy</p>
+                </div>
+                <div class="capability-card">
+                    <div class="icon">📝</div>
+                    <h4>Entity Extraction</h4>
+                    <p>spaCy + Regex + LLM Ensemble</p>
+                </div>
+                <div class="capability-card">
+                    <div class="icon">⚖️</div>
+                    <h4>Claim Adjudication</h4>
+                    <p>Rule-based Business Logic</p>
+                </div>
+                <div class="capability-card">
+                    <div class="icon">✅</div>
+                    <h4>Eligibility Matching</h4>
+                    <p>Plan & Coverage Verification</p>
+                </div>
+                <div class="capability-card">
+                    <div class="icon">📜</div>
+                    <h4>Policy Interpretation</h4>
+                    <p>NLP Clause Analysis</p>
+                </div>
+                <div class="capability-card">
+                    <div class="icon">🤖</div>
+                    <h4>LLM Integration</h4>
+                    <p>AWS Bedrock / OpenAI</p>
+                </div>
+            </div>
+        </section>
+        
+        <div class="content-grid">
+            <div class="panel">
+                <div class="panel-header">
+                    <h3>📤 Document Upload</h3>
+                    <div>
+                        <span class="tech-badge">Tesseract OCR</span>
+                        <span class="tech-badge">PDF Support</span>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+                        <div class="icon">📁</div>
+                        <h4>Drop your document here</h4>
+                        <p>or click to browse</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.8rem;">Supports: PDF, PNG, JPG, TIFF, TXT</p>
+                    </div>
+                    <input type="file" id="fileInput" class="file-input" accept=".pdf,.png,.jpg,.jpeg,.tiff,.tif,.bmp,.txt">
+                    
+                    <div class="pipeline-select">
+                        <div class="pipeline-option active" data-pipeline="v2" onclick="selectPipeline('v2')">
+                            <div class="label">Enhanced (v2)</div>
+                            <div class="desc">Full features, 97-99% accuracy</div>
+                        </div>
+                        <div class="pipeline-option" data-pipeline="v1" onclick="selectPipeline('v1')">
+                            <div class="label">Standard (v1)</div>
+                            <div class="desc">Fast processing</div>
+                        </div>
+                    </div>
+                    
+                    <div id="selectedFile" style="margin-top: 1rem; display: none;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span id="fileName"></span>
+                            <button class="btn btn-primary" onclick="processDocument()">🚀 Process Document</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-header">
+                    <h3>📊 Processing Results</h3>
+                    <div style="display: flex; gap: 0.5rem; align-items: center;">
+                        <button class="btn btn-sm btn-secondary" id="downloadCsvBtn" onclick="downloadResultsAsCSV()" style="display: none;">📥 Download CSV</button>
+                        <div id="resultBadge"></div>
+                    </div>
+                </div>
+                <div class="panel-body results-container" id="resultsContainer">
+                    <div class="empty-state">
+                        <div class="icon">📄</div>
+                        <p>Upload a document to see processing results</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="panel" style="margin-top: 2rem;">
+            <div class="panel-header">
+                <h3>📂 Sample Test Documents</h3>
+                <span class="tech-badge">Ready for Testing</span>
+            </div>
+            <div class="panel-body">
+                <p style="color: var(--text-muted); margin-bottom: 1rem;">Click to load sample documents for testing the system:</p>
+                <div class="sample-docs-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+                    <div class="sample-doc-card" onclick="loadSampleDocument('disability_claim')">
+                        <div class="icon">🏥</div>
+                        <h4>Disability Claim</h4>
+                        <p>CLM-2024-789456 • Sarah Johnson • Lumbar radiculopathy</p>
+                        <div class="sample-fields">Policy: POL-456-7890 • Salary: $85,000</div>
+                    </div>
+                    <div class="sample-doc-card" onclick="loadSampleDocument('enrollment')">
+                        <div class="icon">📝</div>
+                        <h4>Enrollment Form</h4>
+                        <p>Jennifer Martinez • Gold Health Plan • Employee + Spouse</p>
+                        <div class="sample-fields">Effective: 01/01/2025 • Premium: $425/mo</div>
+                    </div>
+                    <div class="sample-doc-card" onclick="loadSampleDocument('policy')">
+                        <div class="icon">📜</div>
+                        <h4>Policy Document</h4>
+                        <p>Long-Term Disability Policy • 60% benefit • 90-day elimination</p>
+                        <div class="sample-fields">Max Benefit: $10,000 • To Age 65</div>
+                    </div>
+                    <div class="sample-doc-card" onclick="loadSampleDocument('rfp')">
+                        <div class="icon">📋</div>
+                        <h4>RFP Document</h4>
+                        <p>Group Benefits RFP • 5,000 employees • Multi-state</p>
+                        <div class="sample-fields">Coverage: Medical, Dental, Vision, Life</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="panel" style="margin-top: 2rem;">
+            <div class="panel-header">
+                <h3>📈 System Metrics</h3>
+                <button class="btn btn-sm btn-secondary" onclick="loadMetrics()">🔄 Refresh</button>
+            </div>
+            <div class="panel-body">
+                <div class="metrics-grid" id="metricsGrid">
+                    <div class="metric-card"><div class="value">97%</div><div class="label">Target Precision</div></div>
+                    <div class="metric-card"><div class="value">99%</div><div class="label">Classification</div></div>
+                    <div class="metric-card"><div class="value">4</div><div class="label">Doc Types</div></div>
+                    <div class="metric-card"><div class="value">6</div><div class="label">Business Rules</div></div>
+                    <div class="metric-card"><div class="value">3</div><div class="label">Extraction Methods</div></div>
+                    <div class="metric-card"><div class="value" id="healthStatus">✓</div><div class="label">System Health</div></div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        let selectedFile = null;
+        let selectedPipeline = 'v2';
+        let lastProcessingResult = null;
+        
+        // Sample documents content
+        const sampleDocuments = {
+            disability_claim: `DISABILITY CLAIM FORM
+====================================
+
+CLAIM INFORMATION
+-----------------
+Claim Number: CLM-2024-789456
+Date of Claim: 12/01/2024
+Policy Number: POL-456-7890
+
+CLAIMANT INFORMATION
+--------------------
+Name: Sarah Elizabeth Johnson
+Date of Birth: 05/15/1985
+Social Security Number: 123-45-6789
+Address: 1234 Oak Street, Suite 100
+City, State ZIP: Boston, MA 02101
+Phone: 617-555-1234
+Email: sarah.johnson@email.com
+
+EMPLOYMENT INFORMATION
+----------------------
+Employer: Acme Healthcare Corporation
+Occupation: Senior Financial Analyst
+Employment Start Date: 01/15/2020
+Annual Salary: $85,000
+Monthly Earnings: $7,083.33
+
+DISABILITY INFORMATION
+----------------------
+Date of Disability: 11/15/2024
+Last Day Worked: 11/14/2024
+Nature of Disability: Acute lumbar strain with radiculopathy resulting from workplace injury
+
+PHYSICIAN INFORMATION
+---------------------
+Attending Physician: Dr. Michael Roberts, MD
+Specialty: Orthopedic Spine Specialist
+Phone: 617-555-5678
+
+DIAGNOSIS
+---------
+Primary Diagnosis: L54.17 - Lumbar radiculopathy
+Secondary Diagnosis: M54.5 - Low back pain
+Treatment Plan: Physical therapy 3x/week, possible epidural injection`,
+
+            enrollment: `EMPLOYEE ENROLLMENT FORM
+====================================
+
+EMPLOYEE INFORMATION
+--------------------
+Employee Name: Jennifer Marie Martinez
+Employee ID: EMP-2024-789
+Date of Birth: 07/14/1992
+Social Security Number: 456-78-9012
+Address: 5678 Pine Avenue, Apt 302
+City, State ZIP: Chicago, IL 60601
+Phone: 312-555-4567
+Email: jennifer.martinez@company.com
+
+EMPLOYMENT DETAILS
+------------------
+Employer: Global Financial Services Inc.
+Department: Information Technology
+Job Title: Software Engineer III
+Employment Date: 03/01/2022
+Employment Status: Full-Time
+
+PLAN SELECTION
+--------------
+Medical Plan: Gold Health Plan
+Dental Plan: Premium Dental
+Vision Plan: Standard Vision
+Life Insurance: 2x Annual Salary
+Disability: Short-Term + Long-Term
+
+COVERAGE LEVEL
+--------------
+Coverage Type: Employee + Spouse
+Dependent: Carlos Martinez (Spouse)
+Dependent DOB: 09/22/1990
+
+BENEFICIARY INFORMATION
+-----------------------
+Primary Beneficiary: Carlos Martinez (Spouse) - 100%
+
+EFFECTIVE DATE
+--------------
+Coverage Effective Date: 01/01/2025
+Monthly Premium: $425.00`,
+
+            policy: `GROUP LONG-TERM DISABILITY INSURANCE POLICY
+============================================
+
+CERTIFICATE OF INSURANCE
+Policy Number: POL-2024-LTD-555
+Effective Date: January 1, 2024
+Group Policyholder: Acme Corporation
+
+ARTICLE I - DEFINITIONS
+-----------------------
+"Total Disability" means the insured is unable to perform the material duties of their own occupation due to injury or sickness.
+
+"Elimination Period" means the 90 consecutive calendar days of disability before benefits begin.
+
+"Benefit Period" means the maximum duration benefits are payable, to age 65 or Social Security Normal Retirement Age.
+
+ARTICLE II - ELIGIBILITY
+------------------------
+All active full-time employees working at least 30 hours per week are eligible after completing 30 days of continuous employment.
+
+ARTICLE III - BENEFITS
+----------------------
+Monthly Benefit: 60% of monthly pre-disability earnings
+Maximum Monthly Benefit: $10,000
+Minimum Monthly Benefit: $100
+
+Own Occupation Period: 24 months
+Any Occupation Period: To age 65
+
+ARTICLE IV - EXCLUSIONS
+-----------------------
+Benefits are not payable for disabilities caused by:
+- Self-inflicted injuries
+- War or act of war
+- Commission of a crime
+- Pre-existing conditions (12/12 limitation)
+- Cosmetic surgery
+- Participation in hazardous activities
+
+PRE-EXISTING CONDITION LIMITATION
+---------------------------------
+12/12 Look-back/Exclusion Period
+A condition for which you received treatment in the 12 months before coverage began will not be covered during the first 12 months of coverage.`,
+
+            rfp: `REQUEST FOR PROPOSAL (RFP)
+GROUP BENEFITS PROGRAM
+====================================
+
+SECTION 1: GENERAL INFORMATION
+------------------------------
+RFP Number: RFP-2024-GB-001
+Issue Date: November 1, 2024
+Response Due: December 15, 2024
+Contact: benefits@acmecorp.com
+
+COMPANY OVERVIEW
+----------------
+Company Name: Acme Corporation
+Industry: Technology
+Headquarters: San Francisco, CA
+Total Employees: 5,000
+Locations: 15 states
+Current Broker: Willis Towers Watson
+
+SECTION 2: COVERAGE REQUIREMENTS
+--------------------------------
+Medical Insurance:
+- PPO and HDHP options required
+- National network access
+- Telemedicine services
+- Mental health parity compliance
+
+Dental Insurance:
+- Preventive: 100%
+- Basic: 80%
+- Major: 50%
+- Annual Maximum: $2,000
+- Orthodontia for dependents under 19
+
+Vision Insurance:
+- Annual eye exam
+- Frames and lenses allowance
+- Contact lens coverage
+
+Life Insurance:
+- Basic Life: 1x salary employer-paid
+- Supplemental Life: Up to 5x salary
+- AD&D coverage
+
+Disability Insurance:
+- STD: 60% of earnings, 26 weeks
+- LTD: 60% of earnings, to age 65
+- Elimination period: 90 days
+
+SECTION 3: CENSUS DATA
+----------------------
+Employee Count by Category:
+- Executives: 50
+- Management: 450
+- Professional: 3,000
+- Administrative: 1,000
+- Other: 500
+
+Average Age: 38.5 years
+Female/Male Ratio: 45%/55%
+Average Salary: $95,000`
+        };
+        
+        function selectPipeline(pipeline) {
+            selectedPipeline = pipeline;
+            document.querySelectorAll('.pipeline-option').forEach(el => {
+                el.classList.toggle('active', el.dataset.pipeline === pipeline);
+            });
+        }
+        
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        
+        uploadZone.addEventListener('dragover', (e) => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+        uploadZone.addEventListener('dragleave', () => { uploadZone.classList.remove('dragover'); });
+        uploadZone.addEventListener('drop', (e) => { e.preventDefault(); uploadZone.classList.remove('dragover'); if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); });
+        fileInput.addEventListener('change', (e) => { if (e.target.files[0]) handleFile(e.target.files[0]); });
+        
+        function handleFile(file) {
+            selectedFile = file;
+            document.getElementById('fileName').textContent = `📎 ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+            document.getElementById('selectedFile').style.display = 'block';
+        }
+        
+        async function processDocument() {
+            if (!selectedFile) return;
+            
+            const resultsContainer = document.getElementById('resultsContainer');
+            const resultBadge = document.getElementById('resultBadge');
+            
+            resultsContainer.innerHTML = `<div class="loading"><div class="spinner"></div><p>Processing document with ${selectedPipeline === 'v2' ? 'Enhanced' : 'Standard'} pipeline...</p></div>`;
+            resultBadge.innerHTML = '';
+            
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            
+            try {
+                const endpoint = selectedPipeline === 'v2' ? '/v2/upload' : '/upload';
+                const response = await fetch(endpoint, { method: 'POST', body: formData });
+                const result = await response.json();
+                
+                if (response.ok) displayResults(result);
+                else displayError(result.error || result.detail || 'Processing failed');
+            } catch (error) {
+                displayError(error.message);
+            }
+        }
+        
+        function displayResults(result) {
+            const resultsContainer = document.getElementById('resultsContainer');
+            const resultBadge = document.getElementById('resultBadge');
+            const downloadBtn = document.getElementById('downloadCsvBtn');
+            
+            // Store result for CSV download
+            lastProcessingResult = result;
+            downloadBtn.style.display = 'inline-flex';
+            
+            const statusClass = result.status === 'success' ? 'success' : 'error';
+            resultBadge.innerHTML = `<span class="status-badge ${statusClass}">${result.status}</span>`;
+            
+            let html = '';
+            
+            // Quality Score
+            if (result.quality_score !== undefined) {
+                const scoreColor = result.quality_score >= 0.97 ? 'var(--success)' : result.quality_score >= 0.90 ? 'var(--warning)' : 'var(--error)';
+                html += `<div class="result-section"><h4>🎯 Quality Score</h4><div class="quality-score"><div class="score" style="color: ${scoreColor}">${(result.quality_score * 100).toFixed(1)}%</div><div class="info"><h5>Overall Quality</h5><p>Target: 97-99% precision</p></div></div></div>`;
+            }
+            
+            // Classification
+            html += `<div class="result-section"><h4>📋 Classification</h4><div style="display: flex; align-items: center; gap: 1rem;"><span class="status-badge info">${formatDocType(result.document_type)}</span><span style="color: var(--text-muted)">${(result.classification_confidence * 100).toFixed(1)}% confidence</span></div><div class="confidence-bar"><div class="confidence-fill" style="width: ${result.classification_confidence * 100}%; background: var(--primary)"></div></div></div>`;
+            
+            // Extracted Entities
+            const entities = result.extracted_entities || result.normalized_entities || {};
+            if (Object.keys(entities).length > 0) {
+                html += `<div class="result-section"><h4>🔍 Extracted Entities (${Object.keys(entities).length})</h4><div class="entity-grid">${Object.entries(entities).map(([key, value]) => `<div class="entity-item"><div class="label">${formatLabel(key)}</div><div class="value">${formatValue(value)}</div></div>`).join('')}</div></div>`;
+            }
+            
+            // Adjudication Result
+            if (result.adjudication) {
+                const adj = result.adjudication;
+                const statusClass = adj.status === 'approved' ? 'success' : adj.status === 'denied' ? 'error' : 'warning';
+                html += `<div class="result-section"><h4>⚖️ Claim Adjudication</h4><div class="adjudication-result"><div class="adjudication-header"><span class="status-badge ${statusClass}">${adj.status.toUpperCase()}</span><span>${(adj.confidence * 100).toFixed(1)}% confidence</span></div><div class="adjudication-details">${adj.benefit_calculation ? `<div class="detail-item"><div class="label">Monthly Benefit</div><div class="value">$${adj.benefit_calculation.final_monthly_benefit?.toLocaleString() || 'N/A'}</div></div>` : ''}<div class="detail-item"><div class="label">Rules Evaluated</div><div class="value">${adj.rules_evaluated || 0}</div></div><div class="detail-item"><div class="label">Rules Passed</div><div class="value">${adj.rules_passed || 0}</div></div>${adj.estimated_benefit_start ? `<div class="detail-item"><div class="label">Benefit Start</div><div class="value">${adj.estimated_benefit_start}</div></div>` : ''}</div></div></div>`;
+            }
+            
+            // Eligibility Result
+            if (result.eligibility) {
+                const elig = result.eligibility;
+                const statusClass = elig.status === 'eligible' ? 'success' : elig.status === 'not_eligible' ? 'error' : 'warning';
+                html += `<div class="result-section"><h4>✅ Eligibility Result</h4><div class="adjudication-result"><div class="adjudication-header"><span class="status-badge ${statusClass}">${elig.status.toUpperCase()}</span><span>${(elig.confidence * 100).toFixed(1)}% confidence</span></div><div class="adjudication-details">${elig.matched_plan ? `<div class="detail-item"><div class="label">Matched Plan</div><div class="value">${elig.matched_plan}</div></div>` : ''}${elig.premium_amount ? `<div class="detail-item"><div class="label">Monthly Premium</div><div class="value">$${elig.premium_amount.toFixed(2)}</div></div>` : ''}${elig.effective_date ? `<div class="detail-item"><div class="label">Effective Date</div><div class="value">${elig.effective_date}</div></div>` : ''}</div></div></div>`;
+            }
+            
+            // Recommendations
+            if (result.recommendations?.length > 0) {
+                html += `<div class="result-section"><h4>💡 Recommendations</h4><ul class="recommendations-list">${result.recommendations.map(r => `<li>${r}</li>`).join('')}</ul></div>`;
+            }
+            
+            // Processing Metrics
+            if (result.processing_metrics) {
+                const pm = result.processing_metrics;
+                html += `<div class="result-section"><h4>⏱️ Processing Metrics</h4><div class="metrics-grid"><div class="metric-card"><div class="value">${pm.total_time_ms?.toFixed(0) || (result.total_processing_time * 1000).toFixed(0)}ms</div><div class="label">Total Time</div></div></div></div>`;
+            }
+            
+            resultsContainer.innerHTML = html;
+        }
+        
+        function displayError(message) {
+            const resultsContainer = document.getElementById('resultsContainer');
+            const resultBadge = document.getElementById('resultBadge');
+            resultBadge.innerHTML = `<span class="status-badge error">Error</span>`;
+            resultsContainer.innerHTML = `<div style="padding: 2rem; text-align: center; color: var(--error);"><div style="font-size: 3rem; margin-bottom: 1rem;">❌</div><p>${message}</p></div>`;
+        }
+        
+        function formatDocType(type) {
+            const types = { 'disability_claim': '🏥 Disability Claim', 'enrollment': '📝 Enrollment Form', 'policy': '📜 Policy Document', 'rfp': '📋 RFP' };
+            return types[type] || type;
+        }
+        
+        function formatLabel(key) { return key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()); }
+        function formatValue(value) { if (Array.isArray(value)) return value.join(', '); if (typeof value === 'object' && value !== null) return JSON.stringify(value); return String(value); }
+        
+        async function loadMetrics() {
+            try {
+                const response = await fetch('/health');
+                const health = await response.json();
+                document.getElementById('healthStatus').textContent = health.status === 'healthy' ? '✓' : '⚠';
+                document.getElementById('healthStatus').style.color = health.status === 'healthy' ? 'var(--success)' : 'var(--warning)';
+            } catch (error) { console.error('Failed to load metrics:', error); }
+        }
+        
+        loadMetrics();
+        
+        // Load sample document
+        async function loadSampleDocument(docType) {
+            const content = sampleDocuments[docType];
+            if (!content) return;
+            
+            // Create a text file from the sample content
+            const blob = new Blob([content], { type: 'text/plain' });
+            const file = new File([blob], `sample_${docType}.txt`, { type: 'text/plain' });
+            
+            handleFile(file);
+            
+            // Auto-process after a brief delay
+            setTimeout(() => processDocument(), 300);
+        }
+        
+        // Download results as CSV
+        function downloadResultsAsCSV() {
+            if (!lastProcessingResult) {
+                alert('No results to download. Please process a document first.');
+                return;
+            }
+            
+            const result = lastProcessingResult;
+            let csvContent = '';
+            
+            // Header row
+            csvContent += 'Category,Field,Value,Confidence\n';
+            
+            // Document Info
+            csvContent += `Document Info,Document Type,"${result.document_type || ''}",${result.classification_confidence || ''}\n`;
+            csvContent += `Document Info,Status,"${result.status || ''}",\n`;
+            csvContent += `Document Info,Quality Score,"${result.quality_score ? (result.quality_score * 100).toFixed(1) + '%' : ''}",\n`;
+            
+            // Extracted Entities
+            const entities = result.extracted_entities || result.normalized_entities || {};
+            for (const [key, value] of Object.entries(entities)) {
+                const formattedValue = Array.isArray(value) ? value.join('; ') : 
+                                       typeof value === 'object' ? JSON.stringify(value) : value;
+                csvContent += `Extracted Entity,${key},"${String(formattedValue).replace(/"/g, '""')}",\n`;
+            }
+            
+            // Adjudication Results
+            if (result.adjudication) {
+                const adj = result.adjudication;
+                csvContent += `Adjudication,Status,"${adj.status || ''}",${adj.confidence || ''}\n`;
+                csvContent += `Adjudication,Rules Evaluated,"${adj.rules_evaluated || ''}",\n`;
+                csvContent += `Adjudication,Rules Passed,"${adj.rules_passed || ''}",\n`;
+                if (adj.benefit_calculation) {
+                    csvContent += `Adjudication,Monthly Benefit,"$${adj.benefit_calculation.final_monthly_benefit || ''}",\n`;
+                }
+                if (adj.denial_reasons?.length) {
+                    csvContent += `Adjudication,Denial Reasons,"${adj.denial_reasons.join('; ')}",\n`;
+                }
+                if (adj.missing_documents?.length) {
+                    csvContent += `Adjudication,Missing Documents,"${adj.missing_documents.join('; ')}",\n`;
+                }
+            }
+            
+            // Eligibility Results
+            if (result.eligibility) {
+                const elig = result.eligibility;
+                csvContent += `Eligibility,Status,"${elig.status || ''}",${elig.confidence || ''}\n`;
+                csvContent += `Eligibility,Matched Plan,"${elig.matched_plan || ''}",\n`;
+                csvContent += `Eligibility,Effective Date,"${elig.effective_date || ''}",\n`;
+            }
+            
+            // Recommendations
+            if (result.recommendations?.length) {
+                result.recommendations.forEach((rec, i) => {
+                    csvContent += `Recommendation,Item ${i + 1},"${rec.replace(/"/g, '""')}",\n`;
+                });
+            }
+            
+            // Processing Metrics
+            if (result.processing_metrics) {
+                csvContent += `Metrics,Total Time (ms),"${result.processing_metrics.total_time_ms?.toFixed(0) || ''}",\n`;
+            }
+            
+            // Download
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const timestamp = new Date().toISOString().slice(0, 19).replace(/[:-]/g, '');
+            link.href = URL.createObjectURL(blob);
+            link.download = `idp_results_${result.document_type || 'document'}_${timestamp}.csv`;
+            link.click();
+        }
+    </script>
+</body>
+</html>

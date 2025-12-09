@@ -1,0 +1,67 @@
+DISABILITY CLAIM FORM - COMPLETE
+====================================
+
+CLAIM INFORMATION
+-----------------
+Claim Number: CLM-2024-APPROVED-001
+Date of Claim: 12/01/2024
+Policy Number: POL-2024-LTD-555
+
+CLAIMANT INFORMATION
+--------------------
+Name: Michael Thompson
+Date of Birth: 03/22/1978
+Social Security Number: 234-56-7890
+Address: 456 Maple Avenue
+City, State ZIP: Chicago, IL 60601
+Phone: 312-555-8765
+Email: michael.thompson@email.com
+
+EMPLOYMENT INFORMATION
+----------------------
+Employer: Thompson Financial Services
+Address: 789 Business Center
+City, State ZIP: Chicago, IL 60602
+Occupation: Software Engineer
+Employment Start Date: 06/15/2018
+Annual Salary: $95,000
+Monthly Earnings: $7,916.67
+
+DISABILITY INFORMATION
+----------------------
+Date of Disability: 09/01/2024
+Last Day Worked: 08/31/2024
+Nature of Disability: Knee injury from automobile accident
+Is Disability Work Related: No
+
+PHYSICIAN INFORMATION
+---------------------
+Attending Physician: Dr. Jennifer Wilson, MD
+Specialty: Orthopedic Surgery
+Medical License: IL-98765
+Address: 500 Medical Plaza
+City, State ZIP: Chicago, IL 60603
+Phone: 312-555-4567
+
+DIAGNOSIS
+---------
+Primary Diagnosis: S83.501A - Sprain of cruciate ligament
+Treatment Plan: Surgical repair with 6 months rehabilitation
+
+DOCUMENTATION ATTACHED
+----------------------
+[X] Attending Physician Statement (APS) - Attached
+[X] Employer Statement - Attached
+[X] Proof of Earnings (W2/Pay Stubs) - Attached
+[X] Claimant Statement - Attached
+[X] Medical Records - Attached
+
+BENEFIT REQUESTED
+-----------------
+Benefit Amount: $4,750 per month (60% of salary)
+Requested Duration: 6 months
+
+SIGNATURES
+----------
+Claimant Signature: Michael Thompson
+Date: 12/01/2024
