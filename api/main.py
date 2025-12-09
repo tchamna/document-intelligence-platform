@@ -901,7 +901,7 @@ async def llm_status():
 @app.post("/llm/classify", tags=["LLM"])
 async def llm_classify(text: str):
     """
-    Classify document using LLM (AWS Bedrock/Claude).
+    Classify document using LLM (AWS Bedrock & OpenAI).
     
     Provides reasoning for classification decision.
     """
@@ -989,8 +989,8 @@ async def get_pipeline_components():
             },
             'llm_provider': {
                 'status': 'ready (mock mode)' if not deps.get('bedrock') else 'ready',
-                'description': 'AWS Bedrock (Claude 3)',
-                'models': ['claude-3-sonnet', 'claude-3-haiku', 'titan-text']
+                'description': 'AWS Bedrock & OpenAI',
+                'models': ['claude-3-sonnet', 'claude-3-haiku', 'gpt-4', 'gpt-3.5-turbo']
             },
             'ocr_engine': {
                 'status': 'ready' if deps['tesseract'] else 'not available',
@@ -1004,7 +1004,7 @@ async def get_pipeline_components():
         },
         'tech_stack': {
             'nlp': 'spaCy 3.7 + en_core_web_lg',
-            'llm': 'AWS Bedrock (Claude 3)',
+            'llm': 'AWS Bedrock & OpenAI',
             'ocr': 'Tesseract 5.x',
             'pdf': 'pdfplumber + pdf2image + Poppler',
             'api': 'FastAPI + uvicorn',
