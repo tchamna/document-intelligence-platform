@@ -165,6 +165,15 @@ async def enhanced_ui():
     raise HTTPException(status_code=404, detail="Enhanced UI not found")
 
 
+@app.get("/batch", tags=["System"], include_in_schema=False)
+async def batch_ui_shortcut():
+    """Serve the batch processing UI (shortcut)"""
+    ui_path = os.path.join(os.path.dirname(__file__), '..', 'static', 'batch_ui.html')
+    if os.path.exists(ui_path):
+        return FileResponse(ui_path)
+    raise HTTPException(status_code=404, detail="Batch UI not found")
+
+
 @app.get("/ui/batch", tags=["System"], include_in_schema=False)
 async def batch_ui():
     """Serve the simplified batch processing UI"""
